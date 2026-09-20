@@ -1,121 +1,129 @@
 import java.util.Scanner;
 
-public class Exp4 {
-
-    static final int MAX = 5;
-    static int[] queue = new int[MAX];
-    static int front = -1;
-    static int rear = -1;
-
-    static void enqueue(int value) {
-     
-        if ((rear + 1) % MAX == front) {
-            System.out.println("Queue is Full");
-        } else {
-          
-            if (front == -1) {
-                front = 0;
-            }
-
-            rear = (rear + 1) % MAX;
-            queue[rear] = value;
-
-            System.out.println(value + " added to queue");
-        }
+class CircularQueue{
+    private int [] queue;
+    private int front,rear,capacity;
+    
+    public CircularQueue(int size){
+        capacity=size;
+        queue=new int[capacity];
+        front=-1;
+        rear=-1;
     }
 
-    static void dequeue() {
-        
-        if (front == -1) {
-            System.out.println("Queue is Empty");
-        } else {
-            System.out.println(queue[front] + " removed from queue");
-
-          
-            if (front == rear) {
-                front = -1;
-                rear = -1;
-            } else {
-                front = (front + 1) % MAX;
-            }
-        }
+    private boolean isFull(){
+        return ((rear+1)%capacity==front);
     }
 
-    static void peek() {
-        if (front == -1) {
-            System.out.println("Queue is Empty");
-        } else {
-            System.out.println("Front element is: " + queue[front]);
-        }
+    private boolean isEmpty(){
+        return (front==-1);
     }
 
-    static void display() {
-        if (front == -1) {
-            System.out.println("Queue is Empty");
+    public void enqueue(int printid){
+        if (isFull()){
+            System.out.println("Queue is full");
             return;
         }
 
-        System.out.print("Queue elements are: ");
+        if (front==-1){
+            front=0;
+        }
+        rear=(rear+1)%capacity;
+        queue[rear]=printid;
+    }
 
-        int i = front;
+    public void dequeue(){
+        if (isEmpty()){
+            System.out.println("Queue os empty");
+            return;
+        }
 
-        while (true) {
-            System.out.print(queue[i] + " ");
+        else{
+            System.out.println(" dequeued element is: "+queue[front]);
+            
+            if (front==rear){
+                front=-1;
+                rear=-1;
+            }
+            else{
+                front=(front+1)%capacity;
+            }
+        }
+    }
+
+    public void peek(){
+        if (isEmpty()){
+            System.out.println("Queue is empty");
+            return;
+        }
+
+        else{
+            System.out.println("The element in front of queue is :"+queue[front]);
+        }
+    }
+
+    public void display(){
+        if (isEmpty()){
+            System.out.println("Queue is empty");
+            return;
+        }
+
+        else{
+            System.out.println("The Queue is :");
+
+            int i = front;
+            while(true){
+                System.out.println(queue[i] + " ");
 
             if (i == rear) {
                 break;
             }
-
-            i = (i + 1) % MAX;
+            i=(i+1)%capacity;
+            }  
         }
-
-        System.out.println();
-    }
-
-    public static void main(String[] args) {
-
-        Scanner sc = new Scanner(System.in);
-        int choice, value;
-
-        do {
-            System.out.println("\n1. Enqueue");
-            System.out.println("2. Dequeue");
-            System.out.println("3. Peek");
-            System.out.println("4. Display");
-            System.out.println("5. Exit");
-
-            System.out.print("Enter your choice: ");
-            choice = sc.nextInt();
-
-            switch (choice) {
-                case 1:
-                    System.out.print("Enter value: ");
-                    value = sc.nextInt();
-                    enqueue(value);
-                    break;
-
-                case 2:
-                    dequeue();
-                    break;
-
-                case 3:
-                    peek();
-                    break;
-
-                case 4:
-                    display();
-                    break;
-
-                case 5:
-                    System.out.println("Program Ended");
-                    break;
-
-                default:
-                    System.out.println("Invalid Choice");
-            }
-
-        } while (choice != 5);
-
-        sc.close();
     }
 }
+
+    public class Exp4{
+    
+    public static void main(String[] args){
+
+    Scanner sc=new Scanner (System.in);
+    System.out.println("Enter the queue size");
+    int capacity=sc.nextInt();
+    CircularQueue queue= new CircularQueue(capacity);
+    int choice;
+
+    do{
+        System.out.println("----Print job queue----\n"
+        +"1.enqueue\n"
+        +"2.dequeue\n"
+        +"3.peek\n"
+        +"4.display\n"
+        +"5.exit");
+
+        choice=sc.nextInt();
+
+        switch(choice){
+            case 1:
+                System.out.println("Enter the printid :");
+                int job= sc.nextInt();
+                queue.enqueue(job);
+                break;
+            case 2:
+                queue.dequeue();
+                break;
+            case 3:
+                queue.peek();
+                break;
+            case 4:
+                queue.display();
+                break;
+            case 5:
+                System.out.println("Exit");
+                break;
+
+        }
+    }while(choice!=5);
+    }
+    }

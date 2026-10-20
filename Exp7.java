@@ -101,7 +101,7 @@ class CircularSinglyLinkedList {
     }
 }
 
-public class Main {
+public class Exp7 {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         CircularSinglyLinkedList list =

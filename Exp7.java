@@ -14,7 +14,6 @@ class Node {
 class CircularSinglyLinkedList {
     Node head = null;
 
-    // Insert a player at the end
     void insert(int player) {
         Node newNode = new Node(player);
 
@@ -33,8 +32,6 @@ class CircularSinglyLinkedList {
         temp.next = newNode;
         newNode.next = head;
     }
-
-    // Delete a player by player number
     void delete(int player) {
         if (head == null) {
             System.out.println("No players in the game.");
@@ -58,11 +55,9 @@ class CircularSinglyLinkedList {
             return;
         }
 
-        // Only one player exists
         if (current == head && head.next == head) {
             head = null;
         }
-        // Deleting the first player
         else if (current == head) {
             Node last = head;
 
@@ -73,7 +68,6 @@ class CircularSinglyLinkedList {
             head = head.next;
             last.next = head;
         }
-        // Deleting any other player
         else {
             previous.next = current.next;
         }
@@ -81,7 +75,6 @@ class CircularSinglyLinkedList {
         System.out.println("Player " + player + " deleted.");
     }
 
-    // Display all players once
     void traverse() {
         if (head == null) {
             System.out.println("No players in the game.");

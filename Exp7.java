@@ -1,29 +1,26 @@
 
 import java.util.Scanner;
 
-class CircularSinglyLinkedList {
+class Node {
+    int player;
+    Node next;
 
-    static class Node {
-        String player;
-        Node next;
-
-        Node(String player) {
-            this.player = player;
-            this.next = null;
-        }
+    Node(int player) {
+        this.player = player;
+        this.next = null;
     }
+}
 
+class CircularSinglyLinkedList {
     Node head = null;
-    Node current = null;
 
     // Insert a player at the end
-    void insert(String name) {
-        Node newNode = new Node(name);
+    void insert(int player) {
+        Node newNode = new Node(player);
 
         if (head == null) {
             head = newNode;
-            head.next = head;
-            current = head;
+            newNode.next = head;
             return;
         }
 
@@ -35,60 +32,56 @@ class CircularSinglyLinkedList {
 
         temp.next = newNode;
         newNode.next = head;
-
-        System.out.println(name + " added successfully.");
     }
 
-    // Delete a player by name
-    void delete(String name) {
+    // Delete a player by player number
+    void delete(int player) {
         if (head == null) {
             System.out.println("No players in the game.");
             return;
         }
 
-        Node temp = head;
-        Node prev = null;
+        Node current = head;
+        Node previous = null;
 
         do {
-            if (temp.player.equalsIgnoreCase(name)) {
+            if (current.player == player) {
                 break;
             }
-            prev = temp;
-            temp = temp.next;
-        } while (temp != head);
 
-        if (!temp.player.equalsIgnoreCase(name)) {
+            previous = current;
+            current = current.next;
+        } while (current != head);
+
+        if (current.player != player) {
             System.out.println("Player not found.");
             return;
         }
 
-        // Only one player
-        if (temp == head && head.next == head) {
+        // Only one player exists
+        if (current == head && head.next == head) {
             head = null;
-            current = null;
-        } else {
-            if (temp == head) {
-                Node last = head;
+        }
+        // Deleting the first player
+        else if (current == head) {
+            Node last = head;
 
-                while (last.next != head) {
-                    last = last.next;
-                }
-
-                head = head.next;
-                last.next = head;
-            } else {
-                prev.next = temp.next;
+            while (last.next != head) {
+                last = last.next;
             }
 
-            if (current == temp) {
-                current = temp.next;
-            }
+            head = head.next;
+            last.next = head;
+        }
+        // Deleting any other player
+        else {
+            previous.next = current.next;
         }
 
-        System.out.println(name + " removed successfully.");
+        System.out.println("Player " + player + " deleted.");
     }
 
-    // Display all players
+    // Display all players once
     void traverse() {
         if (head == null) {
             System.out.println("No players in the game.");
@@ -97,57 +90,47 @@ class CircularSinglyLinkedList {
 
         Node temp = head;
 
-        System.out.println("Players in the circle:");
+        System.out.print("Players: ");
 
         do {
-            System.out.print(temp.player + " -> ");
+            System.out.print(temp.player + " ");
             temp = temp.next;
         } while (temp != head);
 
-        System.out.println("(back to " + head.player + ")");
+        System.out.println("(back to first player)");
     }
+}
 
-    // Move to the next player's turn
-    void nextTurn() {
-        if (current == null) {
-            System.out.println("No players in the game.");
-            return;
-        }
-
-        System.out.println("Current turn: " + current.player);
-        current = current.next;
-        System.out.println("Next player's turn: " + current.player);
-    }
-
+public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         CircularSinglyLinkedList list =
                 new CircularSinglyLinkedList();
 
         int choice;
+        int player;
 
         do {
             System.out.println("\n--- Player Turn Management ---");
             System.out.println("1. Insert Player");
             System.out.println("2. Delete Player");
             System.out.println("3. Display Players");
-            System.out.println("4. Next Turn");
-            System.out.println("5. Exit");
+            System.out.println("4. Exit");
             System.out.print("Enter your choice: ");
 
             choice = sc.nextInt();
-            sc.nextLine();
 
             switch (choice) {
                 case 1:
-                    System.out.print("Enter player name: ");
-                    String name = sc.nextLine();
-                    list.insert(name);
+                    System.out.print("Enter player number: ");
+                    player = sc.nextInt();
+                    list.insert(player);
+                    System.out.println("Player inserted.");
                     break;
 
                 case 2:
-                    System.out.print("Enter player to delete: ");
-                    String player = sc.nextLine();
+                    System.out.print("Enter player number to delete: ");
+                    player = sc.nextInt();
                     list.delete(player);
                     break;
 
@@ -156,18 +139,13 @@ class CircularSinglyLinkedList {
                     break;
 
                 case 4:
-                    list.nextTurn();
-                    break;
-
-                case 5:
                     System.out.println("Game ended.");
                     break;
 
                 default:
                     System.out.println("Invalid choice.");
             }
-
-        } while (choice != 5);
+        } while (choice != 4);
 
         sc.close();
     }
